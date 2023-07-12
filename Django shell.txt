@@ -1,0 +1,100 @@
+from news.models import *
+
+
+user1 = User.objects.create_user('Ivan')
+author1 = Author.objects.create(user = user1)
+author1 = Author.objects.get(id=1)
+
+
+user2 = User.objects.create_user('Petr')
+author2 = Author.objects.create(user = user2)
+author2 = Author.objects.get(id=2)
+
+
+category1 = Category.objects.create(name='Films')
+category2 = Category.objects.create(name='Sport')
+category3 = Category.objects.create(name='Economy') 
+category4 = Category.objects.create(name='Food')
+
+
+category1 = Category.objects.get(id=1)
+category2 = Category.objects.get(id=2)
+category3 = Category.objects.get(id=3) 
+category4 = Category.objects.get(id=4)
+
+
+post1 = Post.objects.create(author=author1, type='PT', title='some_post1', text='some_text') 
+post1 = Post.objects.get(id=1)
+
+
+post2 = Post.objects.create(author=author2, type='PT', title='some_post2', text='some_text')
+post2 = Post.objects.get(id=2)
+
+
+news1 = Post.objects.create(author=author2, type='NS', title='some_news1', text='some_text')
+news1 = Post.objects.get(id=3)
+
+
+post1.category.add(category1)  
+post2.category.add(category2)
+news1.category.add(category3)
+news1.category.add(category4)
+
+
+6) Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий)
+from news.models import Comment
+comment1 = Comment.objects.create(post=post1, user=user1, text='some_coment1') 
+comment2 = Comment.objects.create(post=post2, user=user1, text='some_coment2') 
+comment3 = Comment.objects.create(post=post1, user=user2, text='some_coment3') 
+comment4 = Comment.objects.create(post=news1, user=user2, text='some_coment4')
+
+
+comment1 = Comment.objects.get(id=1)
+comment2 = Comment.objects.get(id=2)
+comment3 = Comment.objects.get(id=3)
+comment4 = Comment.objects.get(id=4)
+
+
+comment1.like()
+comment1.like()
+comment1.like() 
+comment2.like()
+comment2.like()
+comment2.like() 
+comment3.like()
+comment3.like()
+comment3.like() 
+comment4.like()  
+comment4.like()   
+comment1.dislike() 
+comment2.dislike() 
+comment3.dislike()
+comment4.dislike()  
+post1.like() 
+post1.like() 
+post1.like() 
+post1.like() 
+post1.like()
+post1.like()
+post1.dislike()
+post2.like() 
+post2.like() 
+post2.like()
+news1.like()
+news1.like()
+news1.like()
+news1.dislike()
+
+
+author1.update_rating() 
+author2.update_rating()
+
+
+top_author = Author.objects.all().order_by('-rating').values('user', 'rating')[0]
+top_author
+
+
+Post.objects.all().order_by('-rating').values('time_in', 'author__user__username', 'rating', 'title', 'text')[0]
+
+
+Comment.objects.all().order_by().values('time_in', 'user__username', 'rating', 'text')[0]
