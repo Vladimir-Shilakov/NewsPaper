@@ -9,11 +9,11 @@ Posts.title|censor
 {% endblock title %}
 
 {% block content %}
-    <h1>Все новости: {{ posts|length }}</h1>
-    <form action="" method="get">
-        {{ filterset.form.as_p }}
-        <input type="submit" value="Найти" />
-    </form>
+
+<h1>Все новости: {{ posts|length }}</h1>
+{% if is_not_authors %}
+<button> <a href="upgrade/"> Стать автором!</a> </button>
+{% endif %}
     {% if posts %}
         <table>
             <tr>

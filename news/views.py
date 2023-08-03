@@ -1,8 +1,21 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import redirect
+from django.contrib.auth.models import Group
+
+
+@login_required
+def upgrade_me(request):
+    user = request.user
+    author_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        author_group.user_set.add(user)
+    return redirect('/')
 
 
 class PostList(ListView):
@@ -20,6 +33,11 @@ class PostList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
         return context
 
 
@@ -49,7 +67,8 @@ class PostSearch(ListView):
         return context
 
 
-class PostCreate(CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     form_class = PostForm
     model = Post
     template_name = 'post_create.html'
@@ -61,19 +80,22 @@ class PostCreate(CreateView):
         return super().form_valid(form)
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
 
 
-class PostDelete(DeleteView):
+class PostDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('news.delete_post',)
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('posts')
 
 
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     form_class = PostForm
     model = Post
     template_name = 'article_create.html'
