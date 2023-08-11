@@ -14,7 +14,13 @@ Posts.title|censor
 {% if is_not_authors %}
 <button> <a href="upgrade/"> Стать автором!</a> </button>
 {% endif %}
-    {% if posts %}
+{% if is_not_subscribers %}
+<button> <a href="{% url 'subscribe' category.id %}">Подписаться</a> </button>
+{% endif %}
+{% if not is_not_subscribers %}
+<button> <a href="{% url 'unsubscribe' category.id %}">Отписаться</a> </button>
+{% endif %}
+    {% if category_posts_list %}
         <table>
             <tr>
                 <td>Заголовок</td>
@@ -23,7 +29,7 @@ Posts.title|censor
                 <td> Категории </td>
             </tr>
 
-            {% for post in posts %}
+            {% for post in category_posts_list %}
             <tr>
                 <td>{{ post.title|censor }}</td>
                 <td>{{post.time_in|date:'M d Y'}}</td>

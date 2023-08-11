@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import PostList, PostDetail, PostSearch, PostCreate, PostDelete, PostUpdate, ArticleCreate, upgrade_me
+from .views import PostList, PostDetail, PostSearch, PostCreate, PostDelete, PostUpdate, ArticleCreate, upgrade_me, \
+   CategoryListView, subscribe, unsubscribe
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
    path('', PostList.as_view(), name='post_list'),
-   path('<int:pk>', PostDetail.as_view(),name='post_detail'),
+   path('<int:pk>', PostDetail.as_view(), name='post_detail'),
    path('post/search/', PostSearch.as_view(), name="post_search"),
    path('post/create', PostCreate.as_view(), name="post_create"),
    path('<int:pk>/edit', PostUpdate.as_view(), name='post_update'),
@@ -13,4 +14,7 @@ urlpatterns = [
    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
    path('logout/', LogoutView.as_view(template_name='logout.html'), name='logout'),
    path('upgrade/', upgrade_me, name='upgrade'),
+   path('categories/<int:pk>', CategoryListView.as_view(), name='category_list'),
+   path('categories/<int:pk>/subscribe', subscribe, name='subscribe'),
+   path('categories/<int:pk>/unsubscribe', unsubscribe, name='unsubscribe'),
 ]
