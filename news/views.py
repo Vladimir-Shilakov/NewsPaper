@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth.models import Group
+from .tasks import send_notifications, weekly_mail
 
 
 @login_required
@@ -95,6 +96,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
         post = form.save(commit=False)
         post.choice_title = "NS"
         post.save()
+        send_notifications.delay(post.pk)
         return super().form_valid(form)
 
 

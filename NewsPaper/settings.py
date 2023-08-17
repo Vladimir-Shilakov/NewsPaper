@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'django_apscheduler',
  ]
 
 SITE_ID = 1
@@ -160,11 +161,19 @@ SITE_URL = 'http://127.0.0.1:8000/'
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = 'vladimir.shilakov'
+EMAIL_HOST_PASSWORD = 'dtiqcofajoftsmsp'
 EMAIL_USE_SSL = True
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_HOST_EMAIL')
+DEFAULT_FROM_EMAIL = 'vladimir.shilakov@yandex.ru'
 
 APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'
 
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
+
+CELERY_BROKER_URL = \
+    'redis://:DCz8ec3ZhF3ICZs2myxO209slPOgnU3s@redis-14519.c81.us-east-1-2.ec2.cloud.redislabs.com:14519'
+CELERY_RESULT_BACKEND = \
+    'redis://:DCz8ec3ZhF3ICZs2myxO209slPOgnU3s@redis-14519.c81.us-east-1-2.ec2.cloud.redislabs.com:14519'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
