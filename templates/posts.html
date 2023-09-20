@@ -20,12 +20,12 @@ Posts.title|censor
                 <td>Заголовок</td>
                 <td> Дата </td>
                 <td> Текст </td>
-                <td> Категории </td>
+                <td> Категория </td>
             </tr>
 
             {% for post in posts %}
             <tr>
-                <td>{{ post.title|censor }}</td>
+                <td><a href="post/{{ post.id }}">{{ post.title }}</a></td>
                 <td>{{post.time_in|date:'M d Y'}}</td>
                 <td>{{ post.text|truncatechars:20|censor }}</td>
                 <td>
